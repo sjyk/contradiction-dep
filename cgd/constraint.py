@@ -28,12 +28,14 @@ class Violation():
     def __iter__(self):
         return iter(self.data)
 
+
     def __neg__(self):
         cons_set = set()
         for t in product(range(self.N), repeat=self.degree):
             if t not in self.viols:
                 cons_set.add(t)
         return Violation(cons_set, self.N)
+
 
 
 class EmbeddedDependency(Constraint):
