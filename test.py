@@ -1,5 +1,6 @@
 import pandas as pd
 from cgd.dataflow import *
+from cgd.fact import *
 
 raw_data =  [{'title': 'Employee', 'branch':'SF' , 'salary': 60.0}, 
              {'title': 'Employee' , 'branch': 'SF', 'salary': 60.0},
@@ -12,13 +13,10 @@ raw_data =  [{'title': 'Employee', 'branch':'SF' , 'salary': 60.0},
              {'title': 'Manager', 'branch': 'NY' ,'salary': 400.0}]
 
 df = pd.DataFrame(raw_data, columns=['title', 'branch', 'salary'])
-#for i in ThetaJoin(df, df, lambda s,t: s['salary']==t['salary']):
-#    print(i)
-
-#print(df[['title','salary']])
+mdf = match(df,df, ['title', 'branch', 'salary'])
 
 from cgd.constraint import *
 
-e = EmbeddedDependency(lambda x: x['title'] == 'Employee', lambda x: x['salary'] < 100)
-for i in XOR(e[df],e[df]):
+e = EmbeddedDependency(lambda x: x['title'] == 'Employee', lambda x: x['salary'] < 100, suffix='_right')
+for i in e[mdf]:
     print(i)
